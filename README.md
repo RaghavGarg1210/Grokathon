@@ -63,12 +63,12 @@ python -m scripts.discover_handles --apply
 python -m scripts.seed --videos 3 --hero 1
 
 # 4. Launch the app
-streamlit run app/streamlit_app.py
+python -m app.web          # then open http://localhost:8000
 ```
 
 For a live demo, set `CRIER_DEMO_MODE=1`. "Make video" on an already-rendered briefing then replays the pipeline stages from cache instead of waiting minutes. "Scan now" always runs live.
 
-Restart Streamlit after editing `.env` or `config/sources.yaml`.
+Restart the server after editing `.env` or `config/sources.yaml`.
 
 ## Demo script (3 minutes)
 
@@ -92,7 +92,7 @@ crier/               core package (no Streamlit imports)
   render/            voice, scenes, captions, cards (Pillow), ffmpeg, renderer
   pipeline.py        scan/verify/store, draft/render/approve, trust and budget rules
   store.py           SQLite (data/crier.db)
-app/                 Streamlit UI (Radar, Briefing, Studio, Library)
+app/web.py           web UI server (stdlib only) + app/static/index.html (Radar, Briefing, Studio, Library)
 scripts/             smoke_test, discover_handles, seed
 config/sources.yaml  Georgia cities, official X handles, official domains
 tests/               unit + provider boundary tests (mocked HTTP) + a full local render

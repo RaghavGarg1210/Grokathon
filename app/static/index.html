@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The County Crier</title>
+<style>
+:root{--paper:#f3eee2;--ink:#1b1a17;--mute:#6b665a;--soft:#d8d0bd;--red:#a8261c;--green:#2f6b3a;--amber:#9a6a0a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 Georgia,"Times New Roman",serif}
+a{color:var(--red);text-underline-offset:2px}
+.sans,label,select,input,textarea,button,.meta,.tag,nav,h3,.badge,.log{font-family:-apple-system,"Helvetica Neue",Arial,sans-serif}
+header{max-width:1180px;margin:0 auto;padding:22px 16px 0;text-align:center}
+.mast{border-top:4px double var(--ink);border-bottom:1px solid var(--ink);padding:10px 0 8px}
+h1{margin:0;font:700 46px/1 Georgia,serif;letter-spacing:-1px}
+h1 span{color:var(--red);font-style:italic}
+h1 small{font:11px/1 -apple-system,Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--mute);display:block;margin-top:8px;font-weight:400}
+nav{display:flex;justify-content:center;gap:26px;padding:10px 0;border-bottom:1px solid var(--soft);font-size:12px;letter-spacing:1.4px;text-transform:uppercase}
+nav a{color:var(--mute);text-decoration:none;padding-bottom:3px}
+nav a.on{color:var(--ink);border-bottom:2px solid var(--red)}
+.status{font:12px/1.5 -apple-system,Arial,sans-serif;color:var(--mute);margin-top:8px}
+.status b{color:var(--ink);font-weight:600}
+.warn{color:var(--amber)}
+main{max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+h2{font:700 26px/1.2 Georgia,serif;margin:0 0 6px}
+.sub{color:var(--mute);font-style:italic;margin:0 0 14px}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--soft);margin-bottom:6px;font-size:13px}
+select,input[type=text],textarea{background:transparent;color:var(--ink);border:1px solid var(--ink);border-radius:0;padding:6px 8px;font-size:13px}
+textarea{width:100%;font:14px/1.45 Georgia,serif;resize:vertical}
+label{color:var(--mute);font-size:13px}
+button{background:transparent;color:var(--ink);border:1px solid var(--ink);border-radius:0;padding:6px 12px;font-size:13px;cursor:pointer}
+button:hover:not(:disabled){background:var(--ink);color:var(--paper)}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.primary{background:var(--ink);color:var(--paper)}
+button.primary:hover:not(:disabled){background:var(--red);border-color:var(--red)}
+.log{font-size:12.5px;color:var(--mute);border-left:3px solid var(--soft);padding:2px 0 2px 10px;margin:10px 0;min-height:0}
+.log:empty{display:none}
+.log.err{color:var(--red);border-color:var(--red)}
+.item{display:block;padding:14px 0 14px 12px;border-bottom:1px solid var(--soft);border-left:3px solid transparent;color:inherit;text-decoration:none}
+.item:hover{border-left-color:var(--red);background:rgba(168,38,28,.04)}
+.item.dim{opacity:.55}
+.item .t{font:700 20px/1.25 Georgia,serif}
+.item .s{margin-top:2px;color:#3a3830}
+.meta{font-size:11.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.7px;margin-top:5px}
+.tag{font-size:11.5px;text-transform:uppercase;letter-spacing:.7px;margin-right:12px}
+.tag.ok{color:var(--green)}.tag.warn{color:var(--amber)}.tag.bad{color:var(--red)}.tag.n{color:var(--mute)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:34px}
+@media (max-width:900px){.cols{grid-template-columns:1fr}}
+.card{border-top:2px solid var(--ink);padding-top:8px;margin-bottom:22px}
+.card h3{margin:0 0 8px;font-size:11px;letter-spacing:1.6px;text-transform:uppercase}
+blockquote{margin:0;border-left:3px solid var(--red);padding:2px 0 2px 14px;font-style:italic}
+dl{margin:0}dt{font:11px -apple-system,Arial,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:var(--mute);margin-top:12px}dd{margin:2px 0 0}
+.beat{border-top:1px solid var(--soft);padding:12px 0;display:grid;grid-template-columns:28px 1fr 1fr;gap:12px}
+@media (max-width:900px){.beat{grid-template-columns:1fr}}
+.beat .n{font:700 22px Georgia,serif;color:var(--red)}
+.beat label{display:block;margin:6px 0 2px;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+.vids{display:flex;gap:22px;flex-wrap:wrap}
+.vid figure{margin:0}
+.vid video{height:480px;max-width:100%;aspect-ratio:9/16;background:#000;border:2px solid var(--ink);box-shadow:6px 6px 0 var(--soft)}
+.vid figcaption{font:11px -apple-system,Arial,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:var(--mute);margin:8px 0 4px}
+.lib{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:34px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.empty{color:var(--mute);font-style:italic;padding:30px 0}
+.banner{border:1px solid var(--red);color:var(--red);padding:8px 10px;font-size:14px;margin:0 0 16px}
+</style>
+</head>
+<body>
+<header>
+  <div class="mast"><h1>The County <span>Crier</span><small>Georgia edition · what city hall just announced, checked and explained</small></h1></div>
+  <nav id="nav"></nav>
+  <div class="status" id="status"></div>
+</header>
+<main id="view"></main>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const CATEGORY = {program:'Program', policy_decision:'Policy decision', event:'Business event', not_relevant:'Not relevant'};
+const VERIF = {
+  verified:['Verified on official site','ok'], announced_only:['Announced only, not confirmed','warn'],
+  contradicted:['Contradicted by official site','bad'], unverified:['Not checked yet','n']};
+const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+
+let S = null; // server state
+
+async function api(path, opts = {}) {
+  const init = {method: opts.method || 'GET', headers: {'Content-Type': 'application/json'}};
+  if (opts.body !== undefined) init.body = JSON.stringify(opts.body);
+  const r = await fetch(path, init);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || r.statusText);
+  return j;
+}
+async function runJob(path, body, logEl) {
+  logEl.classList.remove('err');
+  logEl.textContent = 'Starting…';
+  const {job} = await api(path, {method: 'POST', body: body || {}});
+  for (;;) {
+    const j = await api('/api/jobs/' + job);
+    logEl.innerHTML = j.messages.map(m => `<div>${esc(m)}</div>`).join('') || 'Working…';
+    if (j.status === 'done') return j.result;
+    if (j.status === 'error') { logEl.classList.add('err'); logEl.innerHTML += `<div>${esc(j.error)}</div>`; throw new Error(j.error); }
+    await sleep(900);
+  }
+}
+const tag = (label, kind) => `<span class="tag ${kind}">${esc(label)}</span>`;
+const badges = b => tag(...(() => { const [l,k] = VERIF[b.verification]; return [l,k]; })())
+  + tag(CATEGORY[b.category], 'n') + tag('Relevance ' + b.relevance_score, 'n');
+
+function renderChrome(route) {
+  const links = [['radar','Mayor Radar'],['briefing','Briefing'],['studio','Video Studio'],['library','Approved Library']];
+  $('#nav').innerHTML = links.map(([k,l]) => `<a href="#/${k}" class="${route === k ? 'on' : ''}">${l}</a>`).join('');
+  const prov = S.providers.map(p => `${p.name}: <b class="${p.ok ? '' : 'warn'}">${esc(p.label)}</b>`).join(' · ');
+  const miss = S.missing_keys.map(m => `<div class="warn">Add ${esc(m.key)} to .env to ${esc(m.actions)}.</div>`).join('');
+  $('#status').innerHTML = prov + (S.demo_mode ? ' · <b>demo mode</b>: cached renders replay their stages' : '') + miss;
+}
+
+/* ---------- Radar ---------- */
+async function viewRadar() {
+  const list = await api('/api/briefings');
+  const cities = S.cities;
+  $('#view').innerHTML = `
+    <h2>Mayor Radar</h2>
+    <p class="sub">Announcements from ${cities.length} Georgia cities in the last ${S.scan_days} days, scored for small-business relevance.</p>
+    <div class="bar">
+      <label>City</label>
+      <select id="scanCity"><option value="">All scannable cities</option>
+        ${cities.map(c => `<option value="${esc(c.city)}" ${c.scannable ? '' : 'disabled'}>${esc(c.city)} (${esc(c.county)} County)${c.scannable ? '' : ' - ' + esc(c.blocker)}</option>`).join('')}
+      </select>
+      <button class="primary" id="scanBtn">Scan now</button>
+      <span style="flex:1"></span>
+      <label>Show</label>
+      <select id="fCat"><option value="">All types</option>${Object.entries(CATEGORY).filter(([k]) => k !== 'not_relevant').map(([k,v]) => `<option value="${k}">${v}</option>`).join('')}</select>
+      <select id="fVer"><option value="">Any verification</option>${Object.entries(VERIF).map(([k,v]) => `<option value="${k}">${v[0]}</option>`).join('')}</select>
+      <label>Min relevance <input type="text" id="fRel" value="${S.min_relevance}" size="3"></label>
+    </div>
+    <div class="log" id="log"></div>
+    <div id="items"></div>`;
+  const draw = () => {
+    const cat = $('#fCat').value, ver = $('#fVer').value, rel = +$('#fRel').value || 0;
+    const rows = list.filter(b => b.category !== 'not_relevant' && !b.is_campaign_or_personal
+      && (!cat || b.category === cat) && (!ver || b.verification === ver) && b.relevance_score >= rel);
+    $('#items').innerHTML = rows.length ? rows.map(b => `
+      <a class="item" href="#/briefing/${b.id}">
+        <div class="t">${esc(b.headline)}</div>
+        <div class="s">${esc(b.what_changed)}</div>
+        <div class="meta">${esc(b.city)} · ${esc(b.county)} County · ${fmtDate(b.posted_on)} · ${esc(b.source_label)}${b.draft_status ? ' · video ' + esc(b.draft_status) : ''}</div>
+        <div class="meta">${badges(b)}</div>
+      </a>`).join('') : `<div class="empty">No announcements match. Run a scan, or lower the relevance filter.</div>`;
+  };
+  ['fCat','fVer','fRel'].forEach(id => $('#' + id).addEventListener('input', draw));
+  draw();
+  $('#scanBtn').onclick = async () => {
+    const btn = $('#scanBtn'); btn.disabled = true;
+    const city = $('#scanCity').value;
+    try {
+      const r = await runJob('/api/scan', {cities: city ? [city] : null}, $('#log'));
+      $('#log').innerHTML += `<div>Done: ${r.found} analyzed, ${r.new} new, ${r.rejected} rejected${r.errors.length ? '. ' + esc(r.errors.join('; ')) : ''}</div>`;
+      setTimeout(route, 1500);
+    } catch (e) { btn.disabled = false; }
+  };
+}
+
+/* ---------- Briefing ---------- */
+async function pickBriefing(kind) {
+  const list = (await api('/api/briefings')).filter(b => b.publishable);
+  $('#view').innerHTML = `<h2>${kind === 'briefing' ? 'Briefing' : 'Video Studio'}</h2>
+    <p class="sub">Choose an announcement.</p>` + (list.length
+      ? list.map(b => `<a class="item" href="#/${kind}/${b.id}"><div class="t">${esc(b.city)}: ${esc(b.headline)}</div><div class="meta">${badges(b)}</div></a>`).join('')
+      : `<div class="empty">No briefings yet. Run a scan from the Mayor Radar.</div>`);
+}
+async function viewBriefing(id) {
+  if (!id) return pickBriefing('briefing');
+  const b = await api('/api/briefings/' + id);
+  const post = b.is_x_post ? `<a href="${esc(b.post_url)}" target="_blank" rel="noopener">${esc(b.source_label)}</a>` : `<a href="${esc(b.post_url)}" target="_blank" rel="noopener">${esc(b.author_handle)}</a>`;
+  $('#view').innerHTML = `
+    <p class="meta"><a href="#/radar">← Mayor Radar</a></p>
+    <h2>${esc(b.headline)}</h2>
+    <div class="meta">${esc(b.city)} · ${esc(b.county)} County${b.mayor ? ' · Mayor ' + esc(b.mayor) : ''} · ${fmtDate(b.posted_on)}</div>
+    <div class="meta" style="margin-bottom:14px">${badges(b)}</div>
+    ${b.verification === 'contradicted' ? '<div class="banner">The official site contradicts this announcement. A video cannot be made from it.</div>' : ''}
+    <div class="cols">
+      <div>
+        <div class="card"><h3>The announcement</h3>
+          <blockquote>${esc(b.post_text)}</blockquote>
+          <div class="meta" style="margin-top:8px">Source: ${post}</div></div>
+        <div class="card"><h3>Verification</h3>
+          <div>${tag(...VERIF[b.verification])}</div>
+          <p>${esc(b.verification_notes) || '<span class="sub">No notes yet.</span>'}</p>
+          ${b.official_url ? `<p class="meta">Official page: <a href="${esc(b.official_url)}" target="_blank" rel="noopener">${esc(b.official_url)}</a></p>` : ''}
+          <div class="row"><button id="reverify">Re-check official sites</button></div>
+          <div class="log" id="log"></div></div>
+      </div>
+      <div>
+        <div class="card"><h3>In plain language</h3>
+          <dl>
+            <dt>What changed</dt><dd>${esc(b.what_changed)}</dd>
+            <dt>Who it affects</dt><dd>${b.who_it_affects.map(esc).join(', ') || 'Not specified'}</dd>
+            <dt>What to do</dt><dd>${esc(b.what_to_do)}</dd>
+            ${b.deadline ? `<dt>Deadline</dt><dd>${fmtDate(b.deadline)}</dd>` : ''}
+            ${b.amount ? `<dt>Amount</dt><dd>${esc(b.amount)}</dd>` : ''}
+            <dt>Model confidence</dt><dd>${esc(b.confidence)}</dd>
+          </dl></div>
+        <div class="row">
+          <a href="#/studio/${b.id}"><button class="primary" ${b.verification === 'contradicted' ? 'disabled' : ''}>${b.draft ? 'Open in Video Studio' : 'Make video'}</button></a>
+          ${b.draft ? tag('video ' + b.draft.status, 'n') : ''}
+        </div>
+      </div>
+    </div>`;
+  $('#reverify').onclick = async () => {
+    $('#reverify').disabled = true;
+    try { await runJob(`/api/briefings/${id}/reverify`, {}, $('#log')); route(); } catch (e) { $('#reverify').disabled = false; }
+  };
+}
+
+/* ---------- Studio ---------- */
+function videosHtml(d) {
+  const langs = [['en','English'],['es','Español']].filter(([k]) => d.videos && d.videos[k]);
+  if (!langs.length) return '';
+  return `<div class="card"><h3>Rendered video</h3><div class="vids">${langs.map(([k,l]) => `
+    <div class="vid"><figure><video controls preload="metadata" src="${esc(d.videos[k])}"></video>
+    <figcaption>${l} · <a href="${esc(d.videos[k])}" download>MP4</a>${d.srts && d.srts[k] ? ` · <a href="${esc(d.srts[k])}" download>SRT</a>` : ''}</figcaption></figure></div>`).join('')}</div></div>`;
+}
+async function viewStudio(id) {
+  if (!id) return pickBriefing('studio');
+  const b = await api('/api/briefings/' + id);
+  const d = b.draft;
+  const head = `<p class="meta"><a href="#/briefing/${b.id}">← Briefing</a></p>
+    <h2>Video Studio</h2><p class="sub">${esc(b.city)}: ${esc(b.headline)}</p>`;
+  if (!d) {
+    $('#view').innerHTML = head + `<div class="row"><button class="primary" id="mk" ${b.verification === 'contradicted' ? 'disabled' : ''}>Write the English + Spanish script</button></div><div class="log" id="log"></div>`;
+    $('#mk').onclick = async () => { $('#mk').disabled = true; try { await runJob(`/api/briefings/${id}/draft`, {}, $('#log')); route(); } catch (e) { $('#mk').disabled = false; } };
+    return;
+  }
+  const sc = d.script;
+  const needsOverride = b.verification !== 'verified';
+  $('#view').innerHTML = head + `
+    <div class="meta" style="margin-bottom:10px">${tag('status: ' + d.status, d.status === 'failed' ? 'bad' : d.status === 'approved' ? 'ok' : 'n')}${tag(...VERIF[b.verification])}</div>
+    ${d.error ? `<div class="banner">${esc(d.error)}</div>` : ''}
+    <div class="cols">
+      <div>
+        <div class="card"><h3>Script</h3>
+          <label>Title (EN)</label><input type="text" id="tEn" style="width:100%" value="${esc(sc.title_en)}">
+          <label>Title (ES)</label><input type="text" id="tEs" style="width:100%" value="${esc(sc.title_es)}">
+          ${sc.beats.map((x,i) => `<div class="beat" data-i="${i}">
+            <div class="n">${i+1}</div>
+            <div><label>Narration EN</label><textarea rows="3" data-f="narration_en">${esc(x.narration_en)}</textarea>
+              <label>On screen EN</label><input type="text" style="width:100%" data-f="on_screen_text_en" value="${esc(x.on_screen_text_en)}"></div>
+            <div><label>Narration ES</label><textarea rows="3" data-f="narration_es">${esc(x.narration_es)}</textarea>
+              <label>On screen ES</label><input type="text" style="width:100%" data-f="on_screen_text_es" value="${esc(x.on_screen_text_es)}"></div>
+            <div style="grid-column:1/-1"><label>Scene (no real people, text or logos)</label><textarea rows="2" data-f="scene_prompt">${esc(x.scene_prompt)}</textarea></div>
+          </div>`).join('')}
+          <label>Caption EN</label><textarea rows="3" id="cEn">${esc(sc.caption_en)}</textarea>
+          <label>Caption ES</label><textarea rows="3" id="cEs">${esc(sc.caption_es)}</textarea>
+          <div class="row"><button id="save">Save script</button></div>
+        </div>
+      </div>
+      <div>
+        <div class="card"><h3>Render</h3>
+          <div class="row">
+            <label><input type="radio" name="mode" value="stills" checked> Stills (fast, low cost)</label>
+            <label><input type="radio" name="mode" value="hero"> Hero (AI video clips)</label>
+          </div>
+          ${needsOverride ? `<div class="row"><label><input type="checkbox" id="override"> Reviewer override: render although not verified on an official site</label></div>` : ''}
+          <div class="row"><button class="primary" id="render">${d.videos && Object.keys(d.videos).length ? 'Render again' : 'Render video'}</button></div>
+          <div class="log" id="log"></div></div>
+        ${videosHtml(d)}
+        ${(d.status === 'ready' || d.status === 'approved' || d.status === 'rejected') ? `
+        <div class="card"><h3>Review</h3>
+          <label>Note for the record</label><input type="text" id="note" style="width:100%" value="${esc(d.reviewer_note)}">
+          <div class="row"><button class="primary" id="approve">Approve</button><button id="reject">Reject</button>
+          <span class="meta">Nothing posts automatically. Approved videos appear in the Library.</span></div></div>` : ''}
+      </div>
+    </div>`;
+  const collect = () => ({
+    title_en: $('#tEn').value, title_es: $('#tEs').value, caption_en: $('#cEn').value, caption_es: $('#cEs').value,
+    beats: [...document.querySelectorAll('.beat')].map(el => Object.fromEntries([...el.querySelectorAll('[data-f]')].map(f => [f.dataset.f, f.value])))});
+  $('#save').onclick = async () => {
+    try { await api(`/api/drafts/${d.id}/script`, {method: 'PUT', body: collect()}); $('#log').classList.remove('err'); $('#log').textContent = 'Script saved.'; }
+    catch (e) { $('#log').classList.add('err'); $('#log').textContent = e.message; }
+  };
+  $('#render').onclick = async () => {
+    $('#render').disabled = true;
+    try {
+      await api(`/api/drafts/${d.id}/script`, {method: 'PUT', body: collect()});
+      const mode = document.querySelector('input[name=mode]:checked').value;
+      await runJob(`/api/drafts/${d.id}/render`, {mode, override_unverified: !!($('#override') && $('#override').checked)}, $('#log'));
+      route();
+    } catch (e) { $('#render').disabled = false; $('#log').classList.add('err'); $('#log').textContent = e.message; }
+  };
+  const decide = kind => async () => {
+    try { await api(`/api/drafts/${d.id}/${kind}`, {method: 'POST', body: {note: $('#note').value}}); location.hash = kind === 'approve' ? '#/library' : '#/radar'; }
+    catch (e) { alert(e.message); }
+  };
+  if ($('#approve')) { $('#approve').onclick = decide('approve'); $('#reject').onclick = decide('reject'); }
+}
+
+/* ---------- Library ---------- */
+async function viewLibrary() {
+  const items = await api('/api/drafts?status=approved');
+  $('#view').innerHTML = `<h2>Approved Library</h2><p class="sub">Reviewed by a person. Download, then post it yourself.</p>` +
+    (items.length ? `<div class="lib">${items.map(({draft: d, briefing: b}) => `
+      <div><div class="meta">${esc(b.city)} · ${esc(b.county)} County</div>
+        <div style="font:700 19px/1.25 Georgia,serif;margin:2px 0 10px">${esc(b.headline)}</div>
+        ${videosHtml(d).replace('class="card"', 'style="margin:0"').replace(/<h3>.*?<\/h3>/, '')}
+        <div class="card" style="margin-top:14px"><h3>Caption (EN)</h3><div style="font-size:14px">${esc(d.script.caption_en)}</div>
+          <div class="row"><button data-copy="${esc(d.script.caption_en)}">Copy EN</button><button data-copy="${esc(d.script.caption_es)}">Copy ES</button></div></div>
+      </div>`).join('')}</div>` : `<div class="empty">Nothing approved yet. Make a video in the Studio and approve it.</div>`);
+  document.querySelectorAll('[data-copy]').forEach(btn => btn.onclick = async () => {
+    try { await navigator.clipboard.writeText(btn.dataset.copy); const t = btn.textContent; btn.textContent = 'Copied'; setTimeout(() => btn.textContent = t, 1200); } catch (e) {}
+  });
+}
+
+/* ---------- router ---------- */
+async function route() {
+  const [, name = 'radar', id] = (location.hash || '#/radar').split('/');
+  try {
+    S = await api('/api/state');
+    renderChrome(name);
+    $('#view').innerHTML = '<div class="empty">Loading…</div>';
+    await ({radar: viewRadar, briefing: viewBriefing, studio: viewStudio, library: viewLibrary}[name] || viewRadar)(id);
+  } catch (e) {
+    $('#view').innerHTML = `<div class="banner">${esc(e.message)}</div>`;
+  }
+}
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>

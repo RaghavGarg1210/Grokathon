@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>County Crier</title>
+<style>
+:root{--paper:#f3eee2;--ink:#1b1a17;--mute:#6b665a;--rule:#1b1a17;--soft:#d8d0bd;--red:#a8261c;--green:#2f6b3a;--amber:#9a6a0a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 Georgia,"Times New Roman",serif}
+a{color:var(--red);text-underline-offset:2px}
+.sans,label,select,button,.k,.note,.tag,.pipe,h3,.badge,.cap{font-family:-apple-system,"Helvetica Neue",Arial,sans-serif}
+header{max-width:1180px;margin:0 auto;padding:22px 16px 0;text-align:center}
+.mast{border-top:4px double var(--rule);border-bottom:1px solid var(--rule);padding:10px 0 8px}
+h1{margin:0;font:700 46px/1 Georgia,serif;letter-spacing:-1px}
+h1 span{color:var(--red);font-style:italic}
+h1 small{font:11px/1 -apple-system,Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--mute);display:block;margin-top:8px;font-weight:400}
+.sub{font-style:italic;color:var(--mute);margin:10px auto 0;max-width:640px;font-size:15px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px 48px}
+.pipe{display:flex;flex-wrap:wrap;justify-content:center;gap:0;margin:14px 0 6px;font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--mute)}
+.pipe div{padding:0 9px;border-left:1px solid var(--soft)}
+.pipe div:first-child{border-left:0}
+.pipe div.on{color:var(--ink)}
+.pipe div b{color:var(--green);margin-right:4px}
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:10px 0 18px;padding:8px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--soft);font-size:13px}
+select{background:transparent;color:var(--ink);border:1px solid var(--rule);border-radius:0;padding:5px 8px;font-size:13px}
+label{color:var(--mute);font-size:13px}
+.grid{display:grid;grid-template-columns:290px 280px 1fr;gap:28px;align-items:start}
+@media (max-width:1000px){.grid{grid-template-columns:1fr}}
+.list{display:flex;flex-direction:column}
+.item{background:none;border:0;border-bottom:1px solid var(--soft);border-left:3px solid transparent;padding:12px 0 12px 12px;cursor:pointer;text-align:left;color:var(--ink);font:inherit}
+.item.sel{border-left-color:var(--red);background:rgba(168,38,28,.05)}
+.item .t{font-weight:700;font-size:17px;line-height:1.25}
+.item .m{font:12px -apple-system,Arial,sans-serif;color:var(--mute);margin-top:4px;text-transform:uppercase;letter-spacing:.6px}
+.pill{display:block;font:italic 13px Georgia,serif;margin-top:4px}
+.pill.ok{color:var(--green)}.pill.warn{color:var(--amber)}
+.phone{width:280px;height:498px;border:2px solid var(--ink);background:#1b1a17;position:relative;overflow:hidden;cursor:pointer;box-shadow:6px 6px 0 var(--soft)}
+.scene{position:absolute;inset:0;padding:54px 22px 70px;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s;color:#f3eee2}
+.scene.show{opacity:1;transform:none}
+.scene .k{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#e8b04a;margin-bottom:12px}
+.scene .h{font:700 30px/1.1 Georgia,serif;margin-bottom:14px}
+.scene .b{font-size:16px;line-height:1.45;color:#ddd6c6}
+.bar{position:absolute;left:12px;right:12px;top:12px;display:flex;gap:4px}
+.bar i{flex:1;height:2px;background:rgba(243,238,226,.25);overflow:hidden}
+.bar u{display:block;height:100%;width:0;background:#f3eee2}
+.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shade{position:absolute;inset:0;background:rgba(18,14,9,.58)}
+.cap{position:absolute;left:0;right:0;bottom:0;padding:10px 14px 14px;background:#000a;color:#f3eee2;font-size:12px;text-align:center}
+.badge{position:absolute;top:22px;right:12px;font-size:9px;letter-spacing:1px;color:#f3eee2;border:1px solid #f3eee266;padding:1px 5px}
+.playhint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;color:#f3eee2;background:#0006}
+.below{display:flex;gap:8px;margin-top:14px}
+button.b{background:transparent;color:var(--ink);border:1px solid var(--ink);border-radius:0;padding:6px 10px;font-size:13px;cursor:pointer}
+button.b:hover{background:var(--ink);color:var(--paper)}
+.card{margin-bottom:20px;border-top:2px solid var(--ink);padding-top:8px}
+.card h3{margin:0 0 6px;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--ink)}
+pre{margin:0;white-space:pre-wrap;word-break:break-word;font:12.5px/1.5 ui-monospace,Menlo,monospace;color:var(--ink);background:rgba(0,0,0,.04);padding:8px}
+ul{margin:0;padding:0;list-style:none}
+li{padding:6px 0;border-top:1px solid var(--soft)}li:first-child{border-top:0}
+.ck{font-weight:700;margin-right:8px;font-family:Arial,sans-serif}.ck.ok{color:var(--green)}.ck.warn{color:var(--amber)}.ck.bad{color:var(--red)}
+.tag{font-size:11px;color:var(--mute);margin-left:8px;text-transform:uppercase;letter-spacing:.6px}
+.note{color:var(--mute);font-size:12px}
+.draft{border-left:3px solid var(--red);padding:2px 0 2px 12px;font-style:italic}
+.banner{border:1px solid var(--red);color:var(--red);padding:8px 10px;font-size:14px;margin-bottom:16px}
+</style>
+</head>
+<body>
+<header>
+  <div class="mast"><h1>The County <span>Crier</span><small>Georgia edition · county business policy, checked</small></h1></div>
+  <div class="sub">TerraTrends shows Georgia business owners where to grow. The Crier finds the county and local-government policies that help them there, checks each one against official pages, and turns it into a short explainer.</div>
+</header>
+<div class="wrap">
+  <div class="pipe" id="pipe"></div>
+  <div class="controls">
+    <label>Your business</label>
+    <select id="biz">
+      <option value="your business">Any small business</option>
+      <option value="a bakery or restaurant">Bakery / restaurant</option>
+      <option value="a retail shop">Retail shop</option>
+      <option value="a salon or service business">Salon / services</option>
+      <option value="a tech startup">Tech startup</option>
+    </select>
+    <label><input type="checkbox" id="speak"> Narrate (browser voice)</label>
+    <span class="note">Demo content: videos are hardcoded animated scripts. In production, Grok writes the script and <code>grok-imagine-video</code> renders it.</span>
+  </div>
+  <div class="grid">
+    <div class="list" id="list"></div>
+    <div>
+      <div class="phone" id="phone"></div>
+      <div class="below">
+        <button class="b" id="replay">↻ Replay</button>
+        <button class="b" id="copy">Copy draft post</button>
+      </div>
+    </div>
+    <div id="detail"></div>
+  </div>
+</div>
+
+<script>
+const STEPS=["Pick","Find","Extract","Verify","Rank","Script","Render","Draft"];
+const CHECKED="2026-11-02";
+
+const VIDEOS=[
+ {
+  id:"cdpa", video:"video1.mp4", county:"Fulton County · City of Atlanta", title:"Georgia business owners: Atlanta's down payment loan policy for buying your storefront",
+  status:{label:"Confirm current availability",kind:"warn"},
+  scenes:[
+   {k:"Fulton County · Georgia",h:"Want to own your storefront?",b:"Georgia county and city policies can help {biz} buy a building.",d:5},
+   {k:"The policy",h:"Down payment help",b:"Press coverage describes a City of Atlanta loan policy that helps small business owners buy commercial property.",d:6},
+   {k:"What you get",h:"Up to 20%",b:"Reported as a direct loan of up to 20% of the property cost, capped at $200,000.",d:6},
+   {k:"Before you apply",h:"Check the rules",b:"Eligibility, deadlines and funding can change. Confirm on the official Invest Atlanta page.",d:6},
+   {k:"Your county",h:"Check local rules too",b:"Official links are below. Every Georgia county sets its own business policies, so check yours.",d:5}
+  ],
+  extracted:{policy:"Atlanta Commercial Down Payment Assistance Loan",county:"Fulton (City of Atlanta)",who_it_helps:"Georgia small business owners buying commercial property",type:"Local-government loan",amount:"up to 20% of property cost, max $200,000 (per press report)",deadline:"not stated in source",confidence:0.7},
+  verify:[
+   {s:"ok",t:"Found in news coverage (ASBN), which names the Mayor's announcement"},
+   {s:"warn",t:"investatlanta.com returned 404 to the automated check on "+CHECKED+" - open the program page manually"},
+   {s:"warn",t:"atlantaga.gov blocked the automated check (HTTP 403) - open manually"},
+   {s:"warn",t:"No deadline or current-funding status found, so flagged for human review"}
+  ],
+  sources:[
+   {l:"News report: Mayor announces the program (ASBN)",u:"https://www.asbn.com/articles/mayor-andre-dickens-announces-atlanta-commercial-down-payment-assistance-loan-program-for-small-businesses/",t:"news"},
+   {l:"Invest Atlanta (official)",u:"https://www.investatlanta.com/",t:"gov"},
+   {l:"City of Atlanta (official)",u:"https://www.atlantaga.gov/",t:"gov"}
+  ],
+  x:[
+   {l:"Live X search: Invest Atlanta down payment loan",u:"https://x.com/search?q=Invest%20Atlanta%20commercial%20down%20payment%20assistance%20loan&f=live"},
+   {l:"Live X search: Mayor Dickens small business",u:"https://x.com/search?q=Mayor%20Dickens%20small%20business%20loan%20Atlanta&f=live"}
+  ],
+  draft:"Georgia business owners in Fulton County: thinking about buying your shop's building in Atlanta? Coverage describes a city loan policy that can cover up to 20% of a commercial property's cost (cap $200K). Check eligibility and current funding on Invest Atlanta's official page before you apply."
+ },
+ {
+  id:"wc", video:"video2.mp4", county:"Fulton County · City of Atlanta", title:"World Cup small-business loans and grants for Atlanta business owners",
+  status:{label:"Held for review: window may have closed",kind:"warn"},
+  scenes:[
+   {k:"Fulton County · Georgia",h:"Big crowds, big chance",b:"Before the 2026 World Cup, Atlanta rolled out money and support for Georgia business owners like {biz}.",d:6},
+   {k:"What was offered",h:"Loans, grants, pop-ups",b:"Coverage lists low-interest loans, grants, pop-up vendor support and a youth entrepreneurship accelerator.",d:7},
+   {k:"Reported size",h:"$5,000 to $15,000",b:"Loans were reported in that range with a 5% match, for roughly 100 applicants.",d:6},
+   {k:"Heads up",h:"Check the dates",b:"The World Cup is over. Our verifier held this video until a human confirms the program is still open.",d:7}
+  ],
+  extracted:{policy:"Atlanta Business Readiness Loan Fund (World Cup)",county:"Fulton (City of Atlanta)",who_it_helps:"Atlanta small business owners preparing for World Cup crowds",type:"Loan + grants",amount:"$5,000-$15,000 with 5% match (per press)",deadline:"tied to 2026 World Cup, likely passed",confidence:0.6},
+  verify:[
+   {s:"ok",t:"Reported by GPB and WABE"},
+   {s:"bad",t:"Event window (2026 World Cup) appears to have passed - do not publish as 'open now'"},
+   {s:"warn",t:"Official program page not confirmed by the automated check"}
+  ],
+  sources:[
+   {l:"GPB: Atlanta initiative offers grants and loans for World Cup preparation",u:"https://www.gpb.org/news/2026/02/04/atlanta-initiative-offers-small-business-grants-loans-for-world-cup-preparation",t:"news"},
+   {l:"WABE: Atlanta opens small business resources ahead of the 2026 World Cup",u:"https://www.wabe.org/atlanta-opens-small-business-resources-ahead-of-the-2026-fifa-world-cup/",t:"news"},
+   {l:"City of Atlanta (official)",u:"https://www.atlantaga.gov/",t:"gov"}
+  ],
+  x:[
+   {l:"Live X search: Atlanta Business Readiness Loan Fund",u:"https://x.com/search?q=Atlanta%20Business%20Readiness%20Loan%20Fund&f=live"}
+  ],
+  draft:"[HELD] Not published. The Atlanta World Cup small-business program may have ended. A human must confirm it is still open before this goes out."
+ },
+ {
+  id:"sba", video:"video3.mp4", county:"All 159 Georgia counties", title:"Georgia business owners in any county: start with the SBA Georgia office",
+  status:{label:"Source page reachable (HTTP 200)",kind:"ok"},
+  scenes:[
+   {k:"Every Georgia county",h:"Starting up is a long run",b:"If you run {biz} in any Georgia county, you don't have to run it alone.",d:5},
+   {k:"Who",h:"SBA Georgia District Office",b:"The U.S. Small Business Administration's Georgia District Office page lists local contacts and resources for business owners.",d:6},
+   {k:"What for",h:"Counseling and loan guidance",b:"Use it to find free business counseling and learn which SBA-backed loans may fit you.",d:6},
+   {k:"Next step",h:"Then ask your county",b:"Links are below. Also ask your county's economic development office which local policies apply.",d:5}
+  ],
+  extracted:{policy:"SBA Georgia District Office resources",county:"All Georgia counties (federal)",who_it_helps:"Georgia small business owners in any county",type:"Counseling / loan guidance",amount:"varies by program",deadline:"none",confidence:0.9},
+  verify:[
+   {s:"ok",t:"sba.gov/district/georgia returned HTTP 200 on "+CHECKED+" (title: Georgia | U.S. Small Business Administration)"},
+   {s:"ok",t:"Federal .gov source"},
+   {s:"warn",t:"No program-specific amounts claimed, since none were verified"}
+  ],
+  sources:[
+   {l:"SBA: Georgia District Office",u:"https://www.sba.gov/district/georgia",t:"gov"},
+   {l:"Georgia Dept. of Community Affairs (state agency)",u:"https://dca.georgia.gov/",t:"gov"}
+  ],
+  x:[
+   {l:"Live X search: SBA Georgia small business",u:"https://x.com/search?q=SBA%20Georgia%20district%20office%20small%20business&f=live"}
+  ],
+  draft:"Georgia business owners, in any county: The SBA's Georgia district page lists local contacts and resources for counseling and SBA-backed loans. Start here: sba.gov/district/georgia"
+ }
+];
+
+const HAVE={};const hv=v=>v.video&&HAVE[v.id];
+let cur=0, timer=null, playing=false, sceneIdx=0;
+const $=s=>document.querySelector(s);
+const biz=()=>$("#biz").value;
+
+function renderPipe(on){
+  $("#pipe").innerHTML=STEPS.map((s,i)=>`<div class="${on>i?'on':''}"><b>${on>i?'✓':''}</b>${i+1}. ${s}</div>`).join("");
+}
+function renderList(){
+  $("#list").innerHTML=VIDEOS.map((v,i)=>`
+   <button class="item ${i===cur?'sel':''}" data-i="${i}">
+     <div class="t">${v.title}</div>
+     <div class="m">${v.county}</div>
+     <span class="pill ${v.status.kind}">${v.status.label}</span>
+   </button>`).join("");
+  document.querySelectorAll(".item").forEach(b=>b.onclick=()=>{cur=+b.dataset.i;select()});
+}
+function renderDetail(){
+  const v=VIDEOS[cur];
+  const held=v.status.kind==="warn" && v.id==="wc";
+  $("#detail").innerHTML=`
+   ${held?'<div class="banner">The Verify step held this item: the program window looks expired. In the live app it would never reach Draft.</div>':''}
+   ${hv(v)?'<div class="card"><h3>Render</h3><div>Background clip generated with Magic Hour text-to-video (short, looped). Looped behind the captions. In production this slot is filled by <code>grok-imagine-video</code>.</div></div>':''}
+   <div class="card"><h3>Extracted (Grok JSON output)</h3><pre>${JSON.stringify(v.extracted,null,2)}</pre></div>
+   <div class="card"><h3>Verification</h3><ul>${v.verify.map(c=>`<li><span class="ck ${c.s}">${c.s==='ok'?'✓':c.s==='warn'?'!':'✕'}</span>${c.t}</li>`).join("")}</ul></div>
+   <div class="card"><h3>Government &amp; news sources</h3><ul>${v.sources.map(s=>`<li><a href="${s.u}" target="_blank" rel="noopener">${s.l}</a><span class="tag">${s.t==='gov'?'official':s.t}</span></li>`).join("")}</ul></div>
+   <div class="card"><h3>X posts (live search links)</h3><ul>${v.x.map(s=>`<li><a href="${s.u}" target="_blank" rel="noopener">${s.l}</a></li>`).join("")}</ul>
+     <div class="note" style="margin-top:6px">These open live X searches. In production Grok's <code>x_search</code> returns the actual posts from officials and agencies.</div></div>
+   <div class="card"><h3>Draft post (human approves before posting)</h3><div class="draft">${v.draft}</div></div>`;
+}
+function renderPhone(){
+  const v=VIDEOS[cur];
+  $("#phone").innerHTML=`
+   ${hv(v)?`<video class="bg" src="${v.video}" muted loop playsinline preload="auto"></video><div class="shade"></div>`:''}
+   <div class="bar">${v.scenes.map(()=>'<i><u></u></i>').join("")}</div>
+   <div class="badge">${hv(v)?"AI B-ROLL · MAGIC HOUR":"DEMO RENDER"}</div>
+   ${v.scenes.map(s=>`<div class="scene"><div class="k">${s.k}</div><div class="h">${s.h}</div><div class="b">${s.b.replaceAll('{biz}',biz())}</div></div>`).join("")}
+   <div class="cap" id="cap"></div>
+   <div class="playhint" id="hint">▶</div>`;
+}
+function stop(){const vd=document.querySelector("#phone video");if(vd)vd.pause();clearTimeout(timer);timer=null;playing=false;speechSynthesis&&speechSynthesis.cancel()}
+function showScene(i){
+  const v=VIDEOS[cur];
+  const scenes=document.querySelectorAll(".scene"), bars=document.querySelectorAll(".bar i u");
+  scenes.forEach((s,j)=>s.classList.toggle("show",j===i));
+  bars.forEach((b,j)=>{b.style.transition="none";b.style.width=j<i?"100%":"0"});
+  const d=v.scenes[i].d;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{bars[i].style.transition=`width ${d}s linear`;bars[i].style.width="100%"}));
+  const text=v.scenes[i].h+". "+v.scenes[i].b.replaceAll('{biz}',biz());
+  $("#cap").textContent=v.scenes[i].b.replaceAll('{biz}',biz());
+  if($("#speak").checked && window.speechSynthesis){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(text))}
+  timer=setTimeout(()=>{ if(i+1<v.scenes.length){sceneIdx=i+1;showScene(sceneIdx)} else {playing=false;$("#hint").style.display="flex";$("#hint").textContent="↻"} },d*1000);
+}
+function play(){
+  stop();playing=true;sceneIdx=0;{const vd=document.querySelector("#phone video");if(vd){vd.currentTime=0;vd.play().catch(()=>{})}}$("#hint").style.display="none";showScene(0);
+}
+function select(){
+  stop();renderList();renderPhone();renderDetail();renderPipe(8);
+  $("#phone").onclick=()=>{ if(playing){stop();$("#hint").style.display="flex";$("#hint").textContent="▶"} else play() };
+}
+$("#replay").onclick=play;
+$("#biz").onchange=()=>{stop();renderPhone();$("#phone").onclick=()=>{playing?(stop(),$("#hint").style.display="flex",$("#hint").textContent="▶"):play()}};
+$("#copy").onclick=async()=>{try{await navigator.clipboard.writeText(VIDEOS[cur].draft);$("#copy").textContent="Copied ✓";setTimeout(()=>$("#copy").textContent="Copy draft post",1500)}catch(e){$("#copy").textContent="Copy failed"}};
+Promise.all(VIDEOS.filter(v=>v.video).map(v=>fetch(v.video,{method:"HEAD"}).then(r=>{HAVE[v.id]=r.ok}).catch(()=>{HAVE[v.id]=false}))).then(select);
+</script>
+</body>
+</html>

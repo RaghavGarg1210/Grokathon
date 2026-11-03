@@ -1,0 +1,106 @@
+# Georgia cities County Crier monitors.
+#
+# `handles` are official X accounts (mayor + city government), without "@". Max 20 per city.
+# Only posts from these accounts are accepted. Leave them empty and run
+# `python -m scripts.discover_handles` for search-backed suggestions, then review
+# config/sources.suggested.yaml and apply with `--apply`.
+#
+# `domains` are the city's official websites. Their news pages are scanned for announcements
+# (so a city with domains but no handles can still be monitored) and used for verification.
+# City domains come first; state_domains fill the remaining verification slots (max 5 total).
+
+state_domains:
+  - georgia.gov
+  - dca.ga.gov
+  - georgia.org
+
+cities:
+  - city: Atlanta
+    county: Fulton
+    mayor: ""
+    lat: 33.749
+    lon: -84.388
+    rural: false
+    handles: []
+    domains: [atlantaga.gov]
+
+  - city: Savannah
+    county: Chatham
+    mayor: ""
+    lat: 32.0809
+    lon: -81.0912
+    rural: false
+    handles: []
+    domains: [savannahga.gov]
+
+  - city: Augusta
+    county: Richmond
+    mayor: ""
+    lat: 33.4735
+    lon: -82.0105
+    rural: false
+    handles: []
+    domains: [augustaga.gov]
+
+  - city: Columbus
+    county: Muscogee
+    mayor: ""
+    lat: 32.4610
+    lon: -84.9877
+    rural: false
+    handles: []
+    domains: [columbusga.gov]
+
+  - city: Macon
+    county: Bibb
+    mayor: ""
+    lat: 32.8407
+    lon: -83.6324
+    rural: false
+    handles: []
+    domains: [maconbibb.us]
+
+  - city: Athens
+    county: Clarke
+    mayor: ""
+    lat: 33.9519
+    lon: -83.3576
+    rural: false
+    handles: []
+    domains: [accgov.com]
+
+  - city: Albany
+    county: Dougherty
+    mayor: ""
+    lat: 31.5785
+    lon: -84.1557
+    rural: false
+    handles: []
+    domains: [albanyga.gov]
+
+  - city: Valdosta
+    county: Lowndes
+    mayor: ""
+    lat: 30.8327
+    lon: -83.2785
+    rural: false
+    handles: []
+    domains: [valdostacity.com]
+
+  - city: Dahlonega
+    county: Lumpkin
+    mayor: ""
+    lat: 34.5326
+    lon: -83.9849
+    rural: true
+    handles: []
+    domains: []
+
+  - city: Thomasville
+    county: Thomas
+    mayor: ""
+    lat: 30.8366
+    lon: -83.9788
+    rural: true
+    handles: []
+    domains: []
